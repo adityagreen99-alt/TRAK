@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coding Journey Tracker</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--tx:#1b1f2a;--mu:#6b7280;--ac:#4f46e5;--ac2:#eef0ff;--bd:#e5e7eb;--ok:#16a34a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1117;--card:#181b24;--tx:#e8eaf0;--mu:#9aa1b2;--ac:#818cf8;--ac2:#232744;--bd:#2a2e3b;--ok:#4ade80}}
+:root[data-theme="dark"]{--bg:#0f1117;--card:#181b24;--tx:#e8eaf0;--mu:#9aa1b2;--ac:#818cf8;--ac2:#232744;--bd:#2a2e3b;--ok:#4ade80}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.w{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:0}h2{font-size:15px;margin:0 0 8px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
+.st{font-size:12px;color:var(--mu)}
+.tabs{display:flex;gap:6px;margin-bottom:14px}
+.tabs button{flex:1;padding:9px;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;font:inherit;cursor:pointer}
+.tabs button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin-bottom:12px}
+.row{display:flex;gap:8px;align-items:center}
+.it{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--bd)}
+.it:last-child{border-bottom:0}
+.it input[type=checkbox]{width:18px;height:18px;accent-color:var(--ac)}
+.it span{flex:1}.it.d span{text-decoration:line-through;color:var(--mu)}
+.x{background:none;border:0;color:var(--mu);cursor:pointer;font-size:18px}
+input[type=text],input[type=password],input[type=date],input[type=month],input[type=number],select,textarea{font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:9px;padding:8px 10px;width:100%}
+textarea{min-height:70px;resize:vertical}
+.b{background:var(--ac);color:#fff;border:0;border-radius:9px;padding:8px 14px;font:inherit;cursor:pointer;white-space:nowrap}
+.b.g{background:var(--ac2);color:var(--ac)}
+.bar{height:8px;background:var(--bd);border-radius:6px;overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:var(--ok)}
+.hm{display:flex;gap:4px;flex-wrap:wrap}
+.hm i{width:20px;height:20px;border-radius:5px;background:var(--bd)}
+.hm i.l1{background:#a7f3d0}.hm i.l2{background:#4ade80}.hm i.l3{background:#16a34a}
+.mu{color:var(--mu);font-size:13px}
+.chip{display:flex;gap:8px;align-items:center;padding:6px 0}
+.chip span{flex:1}
+pre{white-space:pre-wrap;font:inherit;margin:8px 0 0}
+label{display:block;font-size:13px;color:var(--mu);margin:10px 0 4px}
+.hero{display:flex;gap:14px;align-items:center}
+.rg{animation:rg .9s ease-out}@keyframes rg{from{stroke-dashoffset:213.6}}
+.c{transition:box-shadow .2s,transform .2s}.c:hover{box-shadow:0 6px 20px rgba(79,70,229,.14);transform:translateY(-1px)}
+.b{transition:transform .1s,opacity .2s}.b:active{transform:scale(.94)}
+.it input[type=checkbox]{transition:transform .15s}.it input[type=checkbox]:active{transform:scale(1.35)}
+.xp{height:6px;background:var(--bd);border-radius:6px;overflow:hidden;flex:1}.xp i{display:block;height:100%;background:var(--ac);transition:width .5s}
+.cf{position:fixed;pointer-events:none;z-index:99;animation:cf 1s ease-out forwards}@keyframes cf{to{transform:translate(var(--dx),var(--dy)) rotate(360deg);opacity:0}}
+.ts{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 16px);transform:translateX(-50%);background:var(--ac);color:#fff;padding:10px 16px;border-radius:12px;z-index:99;animation:fd .25s}@keyframes fd{from{opacity:0}}
+.sg{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chp{border:1px dashed var(--ac);background:var(--ac2);color:var(--ac);border-radius:16px;padding:4px 10px;font:inherit;font-size:13px;cursor:pointer;text-align:left}
+.bd{font-size:12px;padding:2px 8px;border-radius:10px;background:var(--bd);opacity:.5}.bd.on{background:var(--ac2);opacity:1}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="top"><h1>🚀 Coding Journey</h1><div class="st"><span id="st">Loading…</span> <button class="x" id="so" style="display:none;font-size:13px">Sign out</button></div></div>
+  <div class="tabs" id="tabs"></div>
+  <div id="v"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+/* 1) Paste your Supabase values here (Project Settings > API). The anon key is public by design. */
+const SUPABASE_URL='PASTE_YOUR_SUPABASE_URL',SUPABASE_ANON_KEY='PASTE_YOUR_SUPABASE_ANON_KEY';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const $=s=>document.querySelector(s);
+const pad=n=>String(n).padStart(2,'0');
+const ymd=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S={days:{},goals:{},settings:{tier:'default',effort:'medium',note:'',model:'auto',auto:true,share:false}};
+let ref=null,tab='today',date=ymd(new Date()),pm='month',pk=date.slice(0,7),ai={text:'',sug:null,busy:false};
+const tabs=[['today','Today'],['plans','Plans'],['board','Board'],['ai','AI']];
+
+function day(d){return S.days[d]||(S.days[d]={code:[],sem:[]})}
+function goals(k){return S.goals[k]||(S.goals[k]=[])}
+function pct(a){return a.length?Math.round(a.filter(x=>x.done).length*100/a.length):0}
+function setSt(t){$('#st').textContent=t}
+
+let tm;function save(){
+  if(!ME){setSt('Not saved (sign in to sync)');return}
+  setSt('Saving…');clearTimeout(tm);
+  tm=setTimeout(async()=>{try{const {error}=await sb.from('trackers').upsert({user_id:ME,data:S,updated_at:new Date().toISOString()});if(error)throw error;await pub();setSt('✓ Saved to server')}catch(e){setSt('Save failed')}},500)
+}
+function streak(){
+  let n=0,d=new Date();
+  const done=k=>{const x=S.days[k];return x&&[...x.code,...x.sem].some(i=>i.done)};
+  if(!done(ymd(d)))d.setDate(d.getDate()-1);
+  while(done(ymd(d))){n++;d.setDate(d.getDate()-1)}
+  return n
+}
+function heat(){
+  let h='';const d=new Date();d.setDate(d.getDate()-13);
+  for(let i=0;i<14;i++){
+    const x=S.days[ymd(d)],c=x?[...x.code,...x.sem].filter(t=>t.done).length:0;
+    h+=`<i class="${c>=5?'l3':c>=3?'l2':c>=1?'l1':''}" title="${ymd(d)}: ${c} done"></i>`;d.setDate(d.getDate()+1)
+  }
+  return h
+}
+function list(arr,kind){
+  return arr.map(t=>`<div class="it ${t.done?'d':''}"><input type="checkbox" ${t.done?'checked':''} data-a="tg" data-k="${kind}" data-id="${t.id}"><span>${esc(t.t)}</span><button class="x" data-a="rm" data-k="${kind}" data-id="${t.id}" aria-label="Delete">×</button></div>`).join('')||'<div class="mu">Nothing yet.</div>'
+}
+function addRow(kind,ph){return `<div class="row" style="margin-top:10px"><input type="text" id="in-${kind}" placeholder="${ph}" data-enter="${kind}" autocomplete="off"><button class="b g" data-a="spark" data-k="${kind}" title="Suggest ideas">✨</button><button class="b" data-a="add" data-k="${kind}">Add</button></div><div class="sg" id="sg-${kind}"></div>`}
+
+function vToday(){
+  const x=day(date),all=[...x.code,...x.sem],p=pct(all);
+  return `<div class="c"><div class="row"><button class="b g" data-a="dp">←</button><input type="date" id="dt" value="${date}"><button class="b g" data-a="dn">→</button></div>
+  <div class="hero" style="margin-top:14px"><svg width="84" height="84" viewBox="0 0 84 84"><circle cx="42" cy="42" r="34" fill="none" stroke="var(--bd)" stroke-width="8"/><circle class="rg" cx="42" cy="42" r="34" fill="none" stroke="var(--ok)" stroke-width="8" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="${213.6*(1-p/100)}" transform="rotate(-90 42 42)"/><text x="42" y="47" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor">${p}%</text></svg><div style="flex:1"><b>${greet()}</b><div class="mu">${quote()}</div><div class="row" style="margin-top:6px"><span class="mu">Lv ${lvl()}</span><div class="xp"><i style="width:${lvlPct()}%"></i></div><span class="mu">🔥 ${streak()}</span></div></div></div><div class="row" style="margin-top:10px;flex-wrap:wrap">${[[3,'🥉'],[7,'🥈'],[30,'🥇']].map(([n,e])=>`<span class="bd ${streak()>=n?'on':''}">${e} ${n}-day</span>`).join('')}<span style="flex:1"></span><button class="b" data-a="plan">✨ Plan my day</button></div>
+  <div class="hm" style="margin-top:12px">${heat()}</div><div class="mu" style="margin-top:4px">Last 14 days</div></div>
+  <div class="c"><h2>💻 Daily coding tasks</h2>${list(x.code,'code')}${addRow('code','e.g. Solve 2 LeetCode problems')}</div>
+  <div class="c"><h2>📚 Semester prep</h2>${list(x.sem,'sem')}${addRow('sem','e.g. Revise DBMS normalization')}</div>`
+}
+function vPlans(){
+  const g=goals(pk),p=pct(g);
+  const inp=pm==='month'?`<input type="month" id="pk" value="${pk}">`:`<input type="number" id="pk" value="${pk}" min="2020" max="2100">`;
+  return `<div class="c"><div class="row"><button class="b ${pm==='month'?'':'g'}" data-a="pm" data-k="month">Monthly</button><button class="b ${pm==='year'?'':'g'}" data-a="pm" data-k="year">Yearly</button>${inp}</div>
+  <div class="row" style="margin:12px 0 0;justify-content:space-between"><b>${pm==='month'?'Monthly':'Yearly'} plan</b><span class="mu">${p}% complete</span></div>
+  <div class="bar"><i style="width:${p}%"></i></div>${list(g,'goal')}${addRow('goal',pm==='month'?'e.g. Finish 40 DSA problems':'e.g. Build 3 full-stack projects')}</div>`
+}
+function vAI(){
+  const s=S.settings;
+  const opt=(v,l,c)=>`<option value="${v}" ${c===v?'selected':''}>${l}</option>`;
+  return `<div class="c"><h2>🤖 AI planning assistant</h2>
+  <div class="mu">Suggests tasks and plans based on your history, goals and notes.</div>
+  <div class="row" style="margin-top:10px"><button class="b" data-a="sug" ${ai.busy?'disabled':''}>Suggest today’s plan</button><button class="b g" data-a="rev" ${ai.busy?'disabled':''}>Review my progress</button></div>
+  <div class="row" style="margin-top:10px"><input type="text" id="q" placeholder="Ask anything about your plan…" data-enter="q"><button class="b" data-a="ask" ${ai.busy?'disabled':''}>Ask</button></div>
+  ${ai.sug?ai.sug.map((t,i)=>`<div class="chip"><span>${t.k==='sem'?'📚':'💻'} ${esc(t.t)}</span><button class="b g" data-a="use" data-i="${i}">+ Add</button></div>`).join(''):''}
+  ${ai.text?`<pre>${esc(ai.text)}</pre>`:''}</div>
+  <div class="c"><h2>⚙️ AI settings</h2>
+  <label class="row" style="color:var(--tx)"><input type="checkbox" data-a="set" data-f="auto" ${s.auto?'checked':''} style="width:auto"> Auto-suggest while I add tasks</label><label>About me &amp; focus (the AI reads this)</label><textarea id="note" placeholder="e.g. 2nd-year CSE, learning React + DSA, exams in December, 3 hrs/day free">${esc(s.note)}</textarea></div>`
+}
+function render(){
+  $('#tabs').innerHTML=tabs.map(([k,l])=>`<button class="${tab===k?'on':''}" data-a="tab" data-k="${k}">${l}</button>`).join('');
+  $('#v').innerHTML=tab==='today'?vToday():tab==='plans'?vPlans():tab==='board'?vBoard():vAI();
+}
+
+function ctx(){
+  const rec={};const d=new Date();
+  for(let i=0;i<7;i++){const k=ymd(d);if(S.days[k])rec[k]={coding:S.days[k].code.map(t=>(t.done?'[x] ':'[ ] ')+t.t),semester:S.days[k].sem.map(t=>(t.done?'[x] ':'[ ] ')+t.t)};d.setDate(d.getDate()-1)}
+  const m=ymd(new Date()).slice(0,7),y=m.slice(0,4),f=a=>(a||[]).map(t=>(t.done?'[x] ':'[ ] ')+t.t);
+  return JSON.stringify({today:ymd(new Date()),about:S.settings.note,monthGoals:f(S.goals[m]),yearGoals:f(S.goals[y]),last7days:rec,streak:streak()})
+}
+async function aiCall(prompt,json){
+  const {data:{session}}=await sb.auth.getSession();
+  const r=await fetch('/.netlify/functions/ai',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+session.access_token},body:JSON.stringify({prompt,json:!!json})});
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(d.error||'AI request failed');
+  if(!json)return d.text||'';
+  return JSON.parse(String(d.text).replace(/```json|```/g,'').trim())
+}
+async function run(prompt,json){
+  ai.busy=true;ai.text='Thinking…';ai.sug=null;render();
+  const sys='You are a concise, encouraging planning coach for a student learning to code and preparing for semester exams. Be specific and realistic. Context (JSON): '+ctx()+'\n\n';
+  try{
+    if(json){const r=await aiCall(sys+prompt+'\nReturn ONLY JSON: {"tasks":[{"k":"code"|"sem","t":"short task"}],"tip":"one sentence"}',true);ai.sug=(r.tasks||[]).slice(0,8);ai.text=r.tip||''}
+    else ai.text=await aiCall(sys+prompt)
+  }catch(e){ai.text=e.message||'AI request failed. Try again.'}
+  ai.busy=false;render()
+}
+
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-a]');if(!el)return;
+  const a=el.dataset.a,k=el.dataset.k,id=el.dataset.id;
+  const arr=k==='goal'?goals(pk):k?day(date)[k]:null;
+  if(a==='tab'){tab=k;render();if(k==='board')loadBoard()}
+  else if(a==='tg'){const t=arr.find(x=>x.id===id),l0=lvl();t.done=el.checked;if(t.done){const big=k!=='goal'&&pct([...day(date).code,...day(date).sem])===100;burst(el,big);if(big)toast('🎯 Day complete!');else if(lvl()>l0)toast('⬆️ Level '+lvl()+'!')}save();render()}
+  else if(a==='rm'){const i=arr.findIndex(x=>x.id===id);arr.splice(i,1);save();render()}
+  else if(a==='add')addItem(k);
+  else if(a==='dp'||a==='dn'){const d=new Date(date+'T00:00');d.setDate(d.getDate()+(a==='dn'?1:-1));date=ymd(d);render()}
+  else if(a==='pm'){pm=k;pk=k==='month'?ymd(new Date()).slice(0,7):String(new Date().getFullYear());render()}
+  else if(a==='sug'||a==='plan'){tab='ai';run('Suggest 4–6 tasks for today: coding practice plus semester prep, balanced against what I did recently and my goals.',true)}
+  else if(a==='spark')suggest(k,true);
+  else if(a==='sg'){arr.push({id:uid(),t:ai.inl[k][+el.dataset.i],done:false});ai.inl[k]=[];save();render()}
+  else if(a==='rev')run('Review my recent progress and goals. Give a short honest assessment, what to adjust, and a focus for the next week.');
+  else if(a==='ask'){const q=$('#q').value.trim();if(q)run(q)}
+  else if(a==='use'){const t=ai.sug[+el.dataset.i];day(date)[t.k==='sem'?'sem':'code'].push({id:uid(),t:t.t,done:false});ai.sug.splice(+el.dataset.i,1);save();render()}
+});
+function addItem(k){
+  const i=$('#in-'+k),v=i.value.trim();if(!v)return;
+  (k==='goal'?goals(pk):day(date)[k]).push({id:uid(),t:v,done:false});save();render();$('#in-'+k).focus()
+}
+document.addEventListener('keydown',e=>{
+  if(e.key!=='Enter')return;const k=e.target.dataset&&e.target.dataset.enter;
+  if(k==='q'){const q=e.target.value.trim();if(q)run(q)}else if(k)addItem(k)
+});
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.id==='dt'&&t.value){date=t.value;render()}
+  else if(t.id==='pk'&&t.value){pk=String(t.value);render()}
+  else if(t.dataset.a==='set'){S.settings[t.dataset.f]=t.type==='checkbox'?t.checked:t.value;save();if(t.dataset.f==='share')shareChg()}
+  else if(t.id==='dn'){S.settings.name=t.value.trim();save();if(S.settings.share)shareChg()}
+  else if(t.id==='note'){S.settings.note=t.value;save()}
+});
+
+let ME=null,bd={rows:null};
+const row=()=>({user_id:ME,name:S.settings.name||'Learner',xp:xp(),lvl:lvl(),streak:streak(),updated_at:new Date().toISOString()});
+async function pub(){if(!ME||!S.settings.share)return;try{await sb.from('board').upsert(row())}catch(e){}}
+async function shareChg(){
+  if(!ME){toast('Sign in to join the leaderboard');return}
+  try{
+    const {error}=S.settings.share?await sb.from('board').upsert(row()):await sb.from('board').delete().eq('user_id',ME);
+    if(error)throw error;toast(S.settings.share?'You’re on the board':'Removed from the board')
+  }catch(e){toast('Couldn’t update the leaderboard')}
+  loadBoard()
+}
+async function loadBoard(){
+  try{const {data,error}=await sb.from('board').select('user_id,name,xp,lvl,streak').order('xp',{ascending:false}).limit(20);if(error)throw error;bd.rows=data.map(r=>Object.assign({id:r.user_id},r))}
+  catch(e){bd.rows=[]}
+  if(tab==='board')render()
+}
+function vBoard(){
+  const r=bd.rows;
+  return `<div class="c"><h2>🏆 Leaderboard</h2><div class="mu">Optional. If you join, other signed-in users can see your display name, level, XP and streak. Your tasks, goals and notes always stay private.</div><label>Display name</label><input type="text" id="dn" maxlength="30" value="${esc(S.settings.name||'')}" placeholder="Shown on the leaderboard"><label class="row" style="color:var(--tx)"><input type="checkbox" data-a="set" data-f="share" ${S.settings.share?'checked':''} style="width:auto"> Show me on the leaderboard</label></div><div class="c">${r===null?'<div class="mu">Loading…</div>':r.length?r.map((x,i)=>`<div class="it"><b>${['🥇','🥈','🥉'][i]||i+1}</b><span>${esc(x.name||'Learner')}${x.id===ME?' (you)':''}</span><span class="mu" style="flex:none">Lv ${x.lvl||1} · ${x.xp||0} XP · 🔥${x.streak||0}</span></div>`).join(''):'<div class="mu">No one has joined yet.</div>'}</div>`
+}
+ai.inl={};let sgT,sgN=0;
+const QS=['Small steps, every day.','Consistency beats intensity.','Ship something today.','One bug fixed is one lesson earned.','Future you is watching. Make them proud.','Code a little, learn a lot.'];
+const quote=()=>QS[Math.floor(Date.now()/864e5)%QS.length];
+const greet=()=>{const h=new Date().getHours();return h<12?'Good morning ☀️':h<17?'Good afternoon 🌤️':'Good evening 🌙'};
+function xp(){let n=0;for(const k in S.days){const d=S.days[k];n+=10*[...d.code,...d.sem].filter(t=>t.done).length}for(const k in S.goals)n+=25*S.goals[k].filter(t=>t.done).length;return n}
+const lvl=()=>Math.floor(Math.sqrt(xp()/40))+1;
+function lvlPct(){const l=lvl(),a=40*(l-1)**2,b=40*l*l;return Math.round((xp()-a)*100/(b-a))}
+function mo(q){const s=S.settings,o={modelTier:q?'quick':s.tier,effort:q?'low':s.effort};if(s.model&&s.model!=='auto')o.model=s.model;return o}
+function burst(el,big){const r=el.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,em=['🎉','✨','⭐','💻','🔥'];for(let i=0;i<(big?28:8);i++){const s=document.createElement('span');s.className='cf';s.textContent=em[i%5];s.style.cssText=`left:${x}px;top:${y}px;--dx:${(Math.random()-.5)*(big?400:140)}px;--dy:${-60-Math.random()*(big?300:100)}px`;document.body.appendChild(s);setTimeout(()=>s.remove(),1000)}}
+function toast(t){const d=document.createElement('div');d.className='ts';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2500)}
+async function suggest(k,force){
+  const box=$('#sg-'+k),inp=$('#in-'+k);if(!box||!inp)return;
+  const v=inp.value.trim();if(!force&&(!S.settings.auto||v.length<3))return;
+  const n=++sgN,lab=k==='code'?'daily coding tasks':k==='sem'?'semester exam prep tasks':pm+' goals';
+  box.innerHTML='<span class="mu">✨ thinking…</span>';
+  try{
+    const r=await aiCall('Context: '+ctx()+'\nThe user is adding '+lab+'. They typed: "'+v+'". Suggest 3 specific, short, actionable items'+(v?' that complete or relate to what they typed.':' that fit their history and goals.')+' Return ONLY JSON: {"s":["..."]}',true);
+    if(n!==sgN||!$('#sg-'+k))return;
+    ai.inl[k]=(r.s||[]).slice(0,3);
+    $('#sg-'+k).innerHTML=ai.inl[k].map((t,i)=>`<button class="chp" data-a="sg" data-k="${k}" data-i="${i}">+ ${esc(t)}</button>`).join('');
+  }catch(e){if(n===sgN&&$('#sg-'+k))$('#sg-'+k).innerHTML=''}
+}
+document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.enter;if(k&&k!=='q'){clearTimeout(sgT);sgT=setTimeout(()=>suggest(k),900)}});
+function showAuth(msg){
+  $('#tabs').innerHTML='';
+  $('#v').innerHTML=`<div class="c"><h2>Sign in to your tracker</h2><label>Email</label><input type="text" id="em" autocomplete="email"><label>Password (min 6 characters)</label><input type="password" id="pw" autocomplete="current-password"><div class="row" style="margin-top:12px"><button class="b" id="si">Sign in</button><button class="b g" id="su">Create account</button></div><div class="mu" id="am" style="margin-top:8px">${msg||''}</div></div>`;
+  const go=async up=>{const email=$('#em').value.trim(),password=$('#pw').value;
+    const {data,error}=up?await sb.auth.signUp({email,password}):await sb.auth.signInWithPassword({email,password});
+    if(error){$('#am').textContent=error.message;return}
+    if(data.session)start(data.session.user);else $('#am').textContent='Check your email to confirm your account, then sign in.'};
+  $('#si').onclick=()=>go(false);$('#su').onclick=()=>go(true)
+}
+async function start(user){
+  ME=user.id;$('#so').style.display='';tab='today';
+  try{
+    const {data,error}=await sb.from('trackers').select('data').eq('user_id',ME).maybeSingle();
+    if(error)throw error;
+    if(data&&data.data){const d=data.data;S={days:d.days||{},goals:d.goals||{},settings:Object.assign(S.settings,d.settings||{})}}
+    setSt('✓ Synced with server')
+  }catch(e){setSt('Server unavailable')}
+  render()
+}
+$('#so').onclick=()=>sb.auth.signOut();
+sb.auth.onAuthStateChange(ev=>{if(ev==='SIGNED_OUT')location.reload()});
+(async()=>{
+  const {data:{session}}=await sb.auth.getSession();
+  if(session)start(session.user);else{setSt('Signed out');showAuth()}
+})();
+</script>
+</body>
+</html>
